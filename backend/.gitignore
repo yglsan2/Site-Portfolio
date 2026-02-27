@@ -1,0 +1,15 @@
+# Build
+target/
+
+# Base de données H2 (fichiers locaux)
+data/
+*.db
+*.trace.db
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Maven
+.m2/

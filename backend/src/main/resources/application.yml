@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: portfolio-api
+  sql:
+    init:
+      mode: never
+  datasource:
+    # Base H2 persistante (fichier dans backend/data/)
+    url: jdbc:h2:file:./data/portfolio;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      # update = conserve les données et met à jour le schéma au démarrage
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+server:
+  port: 8080
