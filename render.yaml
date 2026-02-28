@@ -1,10 +1,27 @@
-# Blueprint Render : backend Spring Boot (Docker)
-# Une fois ce fichier poussé sur GitHub : Dashboard Render → New → Blueprint → connecter ce repo.
+# Blueprint Render : backend + frontend sur le même repo (un seul endroit)
+# Dashboard Render → Blueprint → connecter ce repo. Les deux services se déploient ensemble.
 
 services:
+  # Backend API (Spring Boot)
   - type: web
     runtime: docker
     name: portfolio-api
     rootDir: backend
     plan: free
     healthCheckPath: /api/profile
+
+  # Frontend Vue (site statique) — même repo, appelle l’API via VITE_API_URL
+  - type: web
+    runtime: static
+    name: portfolio-frontend
+    rootDir: frontend
+    plan: free
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://portfolio-api.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
