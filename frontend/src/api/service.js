@@ -47,7 +47,17 @@ async function request(path, options = {}) {
         log('error', `HTTP ${res.status} ${url}`, err.message)
         throw err
       }
-      const data = await res.json()
+      const text = await res.text()
+      const contentType = res.headers.get('content-type') || ''
+      if (!contentType.includes('application/json') || (!text.trim().startsWith('{') && !text.trim().startsWith('['))) {
+        const err = new Error(
+          "L'API a renvoyé du HTML au lieu de JSON. Sur Netlify : définissez la variable VITE_API_URL (ex. https://ton-service.onrender.com/api) puis redéployez."
+        )
+        err.status = res.status
+        log('error', `Réponse non-JSON ${url}`, text.slice(0, 200))
+        throw err
+      }
+      const data = JSON.parse(text)
       log('debug', `OK ${url}`)
       return data
     } catch (e) {
