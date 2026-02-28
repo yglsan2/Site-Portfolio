@@ -1,10 +1,10 @@
-# Netlify – build et déploiement du frontend Vue
-# À configurer dans l’UI Netlify : variable d’environnement VITE_API_URL = https://TON-BACKEND.onrender.com/api
+# Netlify – build et déploiement du frontend Vue uniquement (backend = Render)
+# Variable d’environnement dans l’UI Netlify : VITE_API_URL = https://TON-SERVICE.onrender.com/api
 
 [build]
-  base = "frontend"
-  command = "npm run build"
-  publish = "dist"
+  # Explicite : on build et on publie uniquement le frontend (Vite est dans frontend/)
+  command = "cd frontend && npm ci && npm run build"
+  publish = "frontend/dist"
 
 # SPA : toutes les routes renvoient index.html (Vue Router en mode history)
 [[redirects]]
