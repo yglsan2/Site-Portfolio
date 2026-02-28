@@ -1,0 +1,10 @@
+# Blueprint Render : backend Spring Boot (Docker)
+# Une fois ce fichier poussé sur GitHub : Dashboard Render → New → Blueprint → connecter ce repo.
+
+services:
+  - type: web
+    runtime: docker
+    name: portfolio-api
+    rootDir: backend
+    plan: free
+    healthCheckPath: /api/profile
