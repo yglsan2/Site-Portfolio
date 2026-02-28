@@ -10,6 +10,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service métier pour la récupération du profil affiché sur l'accueil.
+ * <p>
+ * S'appuie sur {@link ProfileRepository} pour lire le premier profil (tri par sortOrder).
+ * Un bloc try exécute l'accès repository et le mapping entité → DTO, un catch log et relance,
+ * un finally trace la fin du traitement.
+ * </p>
+ *
+ * @see ProfileRepository#findFirstByOrderBySortOrderAsc()
+ * @see dev.portfolio.dto.ProfileDto
+ */
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
@@ -17,6 +28,11 @@ public class ProfileService {
     private static final Logger log = LoggerFactory.getLogger(ProfileService.class);
     private final ProfileRepository profileRepository;
 
+    /**
+     * Retourne le profil par défaut (premier par ordre d'affichage).
+     *
+     * @return Optional contenant le DTO ou vide si aucun profil en base
+     */
     public Optional<ProfileDto> findDefault() {
         log.debug("ProfileService.findDefault() appelé");
         try {

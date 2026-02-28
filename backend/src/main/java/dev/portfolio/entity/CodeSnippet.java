@@ -3,6 +3,17 @@ package dev.portfolio.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Entité JPA représentant un extrait de code lié à un projet.
+ * <p>
+ * Table {@code code_snippets} : section, titre, slug, langage, description, code, ordre.
+ * ManyToOne vers {@link dev.portfolio.entity.Project}.
+ * </p>
+ *
+ * @see dev.portfolio.entity.Project
+ * @see dev.portfolio.repository.CodeSnippetRepository
+ * @see dev.portfolio.dto.CodeSnippetDto
+ */
 @Entity
 @Table(name = "code_snippets")
 @Getter

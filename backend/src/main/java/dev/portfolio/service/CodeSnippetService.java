@@ -10,6 +10,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service métier pour les extraits de code (snippets) liés aux projets.
+ * <p>
+ * Récupère les snippets d'un projet par son id, triés par ordre d'affichage.
+ * Try/catch/finally et logs sur l'accès repository et le mapping.
+ * </p>
+ *
+ * @see CodeSnippetRepository
+ * @see dev.portfolio.dto.CodeSnippetDto
+ */
 @Service
 @RequiredArgsConstructor
 public class CodeSnippetService {
@@ -17,6 +27,12 @@ public class CodeSnippetService {
     private static final Logger log = LoggerFactory.getLogger(CodeSnippetService.class);
     private final CodeSnippetRepository codeSnippetRepository;
 
+    /**
+     * Retourne les snippets d'un projet donné.
+     *
+     * @param projectId identifiant du projet
+     * @return liste des CodeSnippetDto (jamais null)
+     */
     public List<CodeSnippetDto> findByProjectId(Long projectId) {
         log.debug("CodeSnippetService.findByProjectId(projectId={})", projectId);
         try {

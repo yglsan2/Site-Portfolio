@@ -12,6 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service métier pour les projets du portfolio.
+ * <p>
+ * Expose la liste des projets, la recherche par id et par slug.
+ * Chaque méthode encapsule l'accès repository et le mapping entité → DTO
+ * dans un try/catch/finally avec logs.
+ * </p>
+ *
+ * @see ProjectRepository
+ * @see dev.portfolio.dto.ProjectDto
+ */
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -19,6 +30,11 @@ public class ProjectService {
     private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
     private final ProjectRepository projectRepository;
 
+    /**
+     * Retourne tous les projets, mappés en DTOs.
+     *
+     * @return liste des ProjectDto (jamais null)
+     */
     public List<ProjectDto> findAll() {
         log.debug("ProjectService.findAll() appelé");
         try {
@@ -50,6 +66,12 @@ public class ProjectService {
         }
     }
 
+    /**
+     * Retourne le projet dont le slug correspond.
+     *
+     * @param slug identifiant URL du projet
+     * @return Optional avec le DTO ou vide
+     */
     public Optional<ProjectDto> findBySlug(String slug) {
         log.debug("ProjectService.findBySlug(slug={})", slug);
         try {
@@ -78,6 +100,12 @@ public class ProjectService {
         }
     }
 
+    /**
+     * Retourne le projet par son identifiant technique.
+     *
+     * @param id identifiant du projet
+     * @return Optional avec le DTO ou vide
+     */
     public Optional<ProjectDto> findById(Long id) {
         log.debug("ProjectService.findById(id={})", id);
         try {

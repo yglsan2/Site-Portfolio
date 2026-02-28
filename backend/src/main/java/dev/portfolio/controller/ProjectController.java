@@ -10,6 +10,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST pour les projets du portfolio.
+ * <p>
+ * Routes : liste (GET /api/projects), par id (GET /api/projects/{id}),
+ * par slug (GET /api/projects/slug/{slug}). Le frontend utilise le slug pour
+ * les URLs lisibles (détail d'un projet).
+ * </p>
+ *
+ * @see ProjectService
+ * @see dev.portfolio.dto.ProjectDto
+ */
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
@@ -19,6 +30,11 @@ public class ProjectController {
     private static final Logger log = LoggerFactory.getLogger(ProjectController.class);
     private final ProjectService projectService;
 
+    /**
+     * Liste tous les projets.
+     *
+     * @return 200 avec la liste des {@link ProjectDto}
+     */
     @GetMapping
     public ResponseEntity<List<ProjectDto>> list() {
         log.debug("GET /api/projects");
@@ -42,6 +58,12 @@ public class ProjectController {
         }
     }
 
+    /**
+     * Récupère un projet par son identifiant technique.
+     *
+     * @param id identifiant du projet
+     * @return 200 avec le projet, 404 si non trouvé
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDto> getById(@PathVariable Long id) {
         log.debug("GET /api/projects/{}", id);
@@ -72,6 +94,12 @@ public class ProjectController {
         }
     }
 
+    /**
+     * Récupère un projet par son slug (URL lisible, ex. "mon-projet-api").
+     *
+     * @param slug identifiant URL du projet
+     * @return 200 avec le projet, 404 si non trouvé
+     */
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ProjectDto> getBySlug(@PathVariable String slug) {
         log.debug("GET /api/projects/slug/{}", slug);

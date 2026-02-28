@@ -10,6 +10,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST pour les compétences (skills) du portfolio.
+ * <p>
+ * Une route : GET /api/skills. Retourne toutes les compétences triées par
+ * catégorie et ordre. Utilisé par la page Compétences du frontend.
+ * </p>
+ *
+ * @see SkillService
+ * @see dev.portfolio.dto.SkillDto
+ */
 @RestController
 @RequestMapping("/api/skills")
 @RequiredArgsConstructor
@@ -19,6 +29,11 @@ public class SkillController {
     private static final Logger log = LoggerFactory.getLogger(SkillController.class);
     private final SkillService skillService;
 
+    /**
+     * Liste toutes les compétences (catégorie, nom, niveau, mots-clés).
+     *
+     * @return 200 avec la liste des {@link SkillDto}
+     */
     @GetMapping
     public ResponseEntity<List<SkillDto>> list() {
         log.debug("GET /api/skills");

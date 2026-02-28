@@ -10,6 +10,16 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service métier pour les compétences (skills) du portfolio.
+ * <p>
+ * Récupère toutes les compétences triées par catégorie et ordre,
+ * mappées en {@link SkillDto}. Try/catch/finally et logs sur chaque accès.
+ * </p>
+ *
+ * @see SkillRepository
+ * @see dev.portfolio.dto.SkillDto
+ */
 @Service
 @RequiredArgsConstructor
 public class SkillService {
@@ -17,6 +27,11 @@ public class SkillService {
     private static final Logger log = LoggerFactory.getLogger(SkillService.class);
     private final SkillRepository skillRepository;
 
+    /**
+     * Retourne toutes les compétences en DTOs.
+     *
+     * @return liste des SkillDto (jamais null)
+     */
     public List<SkillDto> findAll() {
         log.debug("SkillService.findAll() appelé");
         try {

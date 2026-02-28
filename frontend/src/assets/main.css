@@ -3,32 +3,205 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0f0f12;
-  --card: #1a1a20;
-  --text: #e8e6e3;
+  --bg: #0a0a0d;
+  --card: #141419;
+  --text: #f0eeeb;
   --muted: #8b8b8b;
-  --accent: #6c9ef8;
-  --accent-hover: #8bb3ff;
+  --accent: #5b8def;
+  --accent-hover: #7ba8ff;
+  --touch-target: 44px;
+  --touch-target-small: 48px; /* petit écran : doigts moins précis */
+  --hit-slop: 10px; /* zone de tap étendue (tolérance) */
+  --scroll-threshold: 12px; /* mouvement au-delà = scroll, pas tap */
+}
+
+/* Petit écran : cibles plus grandes pour précision */
+@media (max-width: 480px) {
+  :root {
+    --touch-target: 48px;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 5.5rem; /* ancre sous la navbar sticky */
 }
 
 body {
   @apply antialiased;
   background-color: var(--bg);
   color: var(--text);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  touch-action: manipulation;
+  overscroll-behavior-y: contain; /* scroll prévisible, pas de bounce chaîné */
 }
 
-/* Responsive container */
+/* Retour visuel au tap */
+a, button {
+  -webkit-tap-highlight-color: rgba(91, 141, 239, 0.2);
+  tap-highlight-color: rgba(91, 141, 239, 0.2);
+}
+
+/*
+ * Mode tactile : les règles ci-dessous s’appliquent quand l’appareil est tactile.
+ * En JS, la classe "touch-device" est aussi ajoutée sur <html> (voir main.js).
+ * On peut utiliser soit (pointer: coarse) en CSS, soit .touch-device pour des adaptations explicites.
+ */
+@media (pointer: coarse) {
+  .touch-target,
+  .touch-target-min {
+    min-height: var(--touch-target);
+    min-width: var(--touch-target);
+  }
+  .touch-target-inline {
+    min-height: var(--touch-target);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  /* Hit slop : zone de tap étendue sans changer le layout */
+  .touch-hit-slop {
+    position: relative;
+    margin: calc(-1 * var(--hit-slop));
+    padding: var(--hit-slop);
+  }
+}
+
+/* Espacement minimal entre éléments tactiles (éviter double tap) */
+@media (pointer: coarse) {
+  .touch-gap > * + * {
+    margin-top: 0.5rem;
+  }
+  .touch-gap-inline > * + * {
+    margin-left: 0.75rem;
+  }
+}
+
+::selection {
+  background: rgba(91, 141, 239, 0.3);
+  color: var(--text);
+}
+
+/* Container : fluide + safe-area (clamp pour transition douce) */
 .container-pro {
-  @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl;
+  @apply mx-auto max-w-6xl;
+  --container-px: clamp(1rem, 4vw, 2rem);
+  padding-left: max(var(--container-px), env(safe-area-inset-left));
+  padding-right: max(var(--container-px), env(safe-area-inset-right));
+}
+@media (max-width: 360px) {
+  .container-pro {
+    --container-px: 0.75rem;
+  }
 }
 
-/* Cards */
+/* Zone de scroll principale : pan-y pour glissement vertical clair */
+main {
+  touch-action: pan-y;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Éviter le scroll horizontal */
+body { overflow-x: hidden; }
+
+/* Blocs de code : scroll horizontal fluide + tolérance */
+.code-block-content {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 1rem;
+}
+
+/* Cards avec hover dynamique */
 .card-pro {
-  @apply rounded-xl border border-white/5 bg-portfolio-card p-5 sm:p-6 transition hover:border-portfolio-accent/30;
+  @apply rounded-2xl border border-white/[0.06] bg-portfolio-card p-5 sm:p-6;
+  @apply transition-all duration-300 ease-out;
+}
+@media (max-width: 480px) {
+  .card-pro {
+    padding: 1rem 1.25rem;
+  }
+}
+.card-pro:hover {
+  @apply border-portfolio-accent/25 bg-portfolio-card-hover;
+  box-shadow: 0 8px 32px -8px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04);
+  transform: translateY(-2px);
+}
+.card-pro:active {
+  transition-duration: 0.1s;
+}
+@media (pointer: coarse) {
+  .card-pro:active {
+    opacity: 0.97;
+  }
 }
 
-/* Links */
+/* Liens */
 .link-accent {
-  @apply text-portfolio-accent hover:text-portfolio-accent-hover transition underline underline-offset-2;
+  @apply text-portfolio-accent hover:text-portfolio-accent-hover transition-colors duration-200 underline underline-offset-2 decoration-portfolio-accent/40 hover:decoration-portfolio-accent-hover;
+}
+
+/* Stagger d’entrée pour listes */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+.stagger-7 { animation-delay: 0.35s; }
+.stagger-8 { animation-delay: 0.4s; }
+.stagger-9 { animation-delay: 0.45s; }
+.stagger-10 { animation-delay: 0.5s; }
+
+/* Bloc de code style IDE */
+.code-block {
+  @apply rounded-xl overflow-hidden border border-white/[0.06] text-sm;
+  background: linear-gradient(180deg, #0d0d10 0%, #0a0a0d 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+.code-block-header {
+  @apply px-4 py-2 flex items-center gap-2 border-b border-white/[0.06] text-portfolio-muted text-xs font-medium;
+  background: rgba(0,0,0,0.2);
+}
+.code-block-content {
+  @apply p-4 overflow-x-auto;
+}
+.code-block-content code {
+  @apply text-[13px] leading-relaxed font-mono;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
+/* Réduction des animations si l’utilisateur le préfère (accessibilité) */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .card-pro,
+  .card-pro:hover { transform: none; transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s; }
+  [class*="animate-"],
+  .home-item { animation: none !important; opacity: 1; transform: none; }
+  .stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5,
+  .stagger-6, .stagger-7, .stagger-8, .stagger-9, .stagger-10 { animation-delay: 0s; }
+}
+
+/* Focus visible (clavier / accessibilité) */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.focus-visible-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Impression : contenu lisible, pas de décor */
+@media print {
+  .skip-link,
+  header,
+  footer,
+  .copy-btn,
+  .animate-float,
+  .animate-glow-pulse { display: none !important; }
+  body { background: #fff; color: #111; }
+  .card-pro { border: 1px solid #ddd; box-shadow: none; }
+  a[href]::after { content: none; }
 }

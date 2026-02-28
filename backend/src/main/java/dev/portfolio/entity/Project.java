@@ -6,6 +6,17 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entité JPA représentant un projet du portfolio.
+ * <p>
+ * Table {@code projects} : titre, slug (URL), description, type (SOFTWARE/WEBSITE/OPEN_SOURCE),
+ * technologies (liste), ordre, URLs projet/repo. Relation OneToMany vers {@link CodeSnippet}.
+ * </p>
+ *
+ * @see CodeSnippet
+ * @see dev.portfolio.repository.ProjectRepository
+ * @see dev.portfolio.dto.ProjectDto
+ */
 @Entity
 @Table(name = "projects")
 @Getter

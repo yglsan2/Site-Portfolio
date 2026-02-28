@@ -6,6 +6,15 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entité JPA représentant une compétence (skill) du portfolio.
+ * <p>
+ * Table {@code skills} : nom, catégorie, niveau (%), ordre, liste de mots-clés.
+ * </p>
+ *
+ * @see dev.portfolio.repository.SkillRepository
+ * @see dev.portfolio.dto.SkillDto
+ */
 @Entity
 @Table(name = "skills")
 @Getter

@@ -10,6 +10,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST pour les extraits de code (snippets) liés aux projets.
+ * <p>
+ * Une route : GET /api/snippets/project/{projectId}. Retourne les snippets
+ * d'un projet donné, triés par ordre d'affichage. Utilisé par la page Codes
+ * et le détail projet du frontend.
+ * </p>
+ *
+ * @see CodeSnippetService
+ * @see dev.portfolio.dto.CodeSnippetDto
+ */
 @RestController
 @RequestMapping("/api/snippets")
 @RequiredArgsConstructor
@@ -19,6 +30,12 @@ public class CodeSnippetController {
     private static final Logger log = LoggerFactory.getLogger(CodeSnippetController.class);
     private final CodeSnippetService codeSnippetService;
 
+    /**
+     * Liste les extraits de code pour un projet donné.
+     *
+     * @param projectId identifiant du projet
+     * @return 200 avec la liste des {@link CodeSnippetDto}
+     */
     @GetMapping("/project/{projectId}")
     public ResponseEntity<List<CodeSnippetDto>> listByProject(@PathVariable Long projectId) {
         log.debug("GET /api/snippets/project/{}", projectId);
